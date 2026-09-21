@@ -7,7 +7,7 @@ import io
 import json
 import numpy as np
 import tensorflow as tf
-
+from pathlib import Path
 
 # ============================================================
 # 1. CREATE FASTAPI APP
@@ -37,12 +37,16 @@ IMG_HEIGHT = 224
 IMG_WIDTH = 224
 
 
-# ============================================================
-# 4. LOAD TRAINED MODEL
-# ============================================================
+BASE_DIR = Path(__file__).resolve().parent
+
+MODEL_PATH = (
+    BASE_DIR
+    / "models"
+    / "potato_mobilenetv2_from_notebook.keras"
+)
 
 model = tf.keras.models.load_model(
-    "potato_mobilenetv2_from_notebook.keras"
+    MODEL_PATH
 )
 
 print("Model loaded successfully.")
@@ -52,20 +56,17 @@ print("Model loaded successfully.")
 # 5. LOAD CLASS NAMES
 # ============================================================
 
+CLASS_NAMES_PATH = (
+    BASE_DIR
+    / "potato_class_names.json"
+)
+
 with open(
-    "potato_class_names.json",
+    CLASS_NAMES_PATH,
     "r"
 ) as f:
 
     class_names = json.load(f)
-
-
-print("Class names:")
-
-for i, name in enumerate(class_names):
-    print(i, "->", name)
-
-
 # ============================================================
 # 6. PREDICTION ENDPOINT
 # ============================================================
